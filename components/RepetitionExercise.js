@@ -22,13 +22,13 @@ export default function RepetitionExercise({ route, navigation }) {
       setRep((rep) => rep + 1);
     }, [setRep]);
   return (
-    <>
+    <SafeAreaView style={styles.container}>
       <Text style={styles.data}>{rep}</Text>
       <View style={styles.actionButtonContainer}>
         <Button title="reset" onPress={reset} style={styles.button} buttonStyle={{ backgroundColor: "#AAAAAA" }}/>
         <Button title="+" onPress={add} style={styles.button} />
       </View>
 
-    </>
+    </SafeAreaView>
   );
 }

@@ -50,7 +50,7 @@ export default function DurationExercise({ route, navigation }) {
     setRunning(false);
   }, [setRunning]);
   return (
-    <>
+    <SafeAreaView style={styles.container}>
       <Text style={styles.data}>
         {min}:{sec}:{mil}
       </Text>
@@ -68,6 +68,6 @@ export default function DurationExercise({ route, navigation }) {
           buttonStyle={{ backgroundColor: running? "#AA1010" : "#10AA10"}}
         />
       </View>
-    </>
+    </SafeAreaView>
   );
 }

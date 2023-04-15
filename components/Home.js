@@ -22,8 +22,15 @@ import {
       );
     };
     return (
-      <SafeAreaView>
-        <Text style={[styles.data,{textAlign:"center"}]}>Begin an activity</Text>
+      <SafeAreaView style={[styles.container, {paddingHorizontal:50}]}>
+        <Text style={styles.title}>BuddyWorkout</Text>
+        <Button/>
+        <View style={styles.smallBox}>
+            <Text style={{color:"white"}}>Daily Goal</Text>
+            <Text style={{color:"white"}}>0/0</Text>
+            <Text style={{color:"white"}}>0/0</Text>
+        </View>
+        <Text style={styles.heading2}>Start an activity</Text>
         <View style={styles.activitiesContainer}>
           <FlatList
           numColumns={2}

@@ -6,9 +6,8 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useState } from "react";
 import DurationExercise from "./components/DurationExercise";
 import RepetitionExercise from "./components/RepetitionExercise";
-
 import Home from "./components/Home.js";
-
+import Settings from "./components/SettingsScreen.js"
 
 const Stack = createNativeStackNavigator();
 
@@ -39,37 +38,60 @@ export const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingTop: Constants.statusBarHeight,
-    backgroundColor: "#25282D",
+    backgroundColor: "#171722",
     color: "#FFFFFF",
+    padding: 50
   },
   activitiesContainer:{
-    alignItems:"center"
+    alignItems:"center",
+    padding: 20
   },
   actionButtonContainer:{
     flexDirection: 'row',
     justifyContent: "center",
     marginTop:20
   },
+  smallBox:{
+    backgroundColor: "#2B2A41",
+    borderRadius:10,
+    padding: 20,
+    marginVertical: 20
+  },
   // buttons
   activities: {
-    backgroundColor: "#AAAACE",
+    backgroundColor: "#3D3ACE",
     margin: 10,
-    padding: 30,
+    padding: 20,
     borderRadius: 10,
-    width: 250,
+    width: 200,
+    height: 200,
   },
   button: {
     width: 200,
-    margin: 10
+    margin: 10,
+    borderRadius: 10
   },
   grayButton:{
     backgroundColor: "#101010"
   },
   // text
-  data:{
-    fontSize:30,
-    textAlign: "center",
+  title:{
+    fontSize: 40,
     fontWeight: "bold",
-    marginTop:20
+    marginTop:20,
+    color:"white"
+  },
+  heading2:{
+    fontSize: 25,
+    fontWeight: "bold",
+    marginTop:20,
+    color:"white"
+  },
+  data:{
+    textAlign:"center",
+    fontSize:30,
+    fontWeight: "bold",
+    marginTop:20,
+    color:"white"
   }
 });
