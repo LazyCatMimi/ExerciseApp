@@ -28,6 +28,11 @@ export default function App() {
           component={RepetitionExercise}
           options={({ route }) => ({ title: route.params.title })}
         />
+         <Stack.Screen
+          name="Settings"
+          component={Settings}
+          
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

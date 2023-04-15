@@ -24,7 +24,7 @@ import {
     return (
       <SafeAreaView style={[styles.container, {paddingHorizontal:50}]}>
         <Text style={styles.title}>BuddyWorkout</Text>
-        <Button/>
+        <TouchableOpacity onPress={()=>navigation.navigate("Settings")}><Text>Settomgs</Text></TouchableOpacity>
         <View style={styles.smallBox}>
             <Text style={{color:"white"}}>Daily Goal</Text>
             <Text style={{color:"white"}}>0/0</Text>
