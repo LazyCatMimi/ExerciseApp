@@ -24,7 +24,15 @@ export default function Settings({navigation}){
         heightIN:"",
         calorieGoal:"",
         timeGoal:""
-    })
+      })
+      let [disableSubmit, setDisableSubmit] = useState(false)
+      let [error, setError] = useState({
+        weight:"",
+        heightFT:"",
+        heightIN:"",
+        calorieGoal:"",
+        timeGoal:""
+      })
 
 
       //get user data from local storage when component loads
@@ -42,6 +50,10 @@ export default function Settings({navigation}){
         getUserInfo()
       },  [])
 
+
+      useEffect(()=>{
+        setDisableSubmit(!Object.values(error).every(prop => prop.length === 0))
+      }, [error])
         //   on press of save button
       const handleSave = async ()=>{
         try {
@@ -51,6 +63,22 @@ export default function Settings({navigation}){
           }
         navigation.navigate("Home")
       }
+      const verifyInput = (value, property) => {
+        const regex = /^[0-9\b]+$/;
+        console.log(value)
+        setUserInfo({...userInfo, [property]: value})
+        if (regex.test(value) || value.length === 0) {
+          setError({...error, [property]: ""});
+        } else {
+          setError({...error, [property]: "Please enter only numbers."})
+        }
+        if(property==="calorieGoal" && userInfo.weight.length === 0){
+          setError({...error, calorieGoal: "calories cannot be calculated without weight."})
+        }
+        if(property==="weight" && error.calorieGoal.length > 0 && regex.test(value)){
+          setError({...error, calorieGoal: ""})
+        }
+      };
     return(
         <SafeAreaView style={[[styles.container, {paddingHorizontal:50}]]}>
             <View style={styles.row}>
@@ -68,7 +96,8 @@ export default function Settings({navigation}){
                 <Input 
                 label="Weight" 
                 value={userInfo.weight}
-                onChangeText={(value)=>setUserInfo({...userInfo, weight: value})}
+                onChangeText={(value)=>verifyInput (value, "weight")}
+                errorMessage={error.weight}
                 placeholder="lbs" 
                 {...inputStyles}/>
 
@@ -76,14 +105,16 @@ export default function Settings({navigation}){
                     <Input 
                     label="Height" 
                     value={userInfo.heightFT}
-                    onChangeText={(value)=>setUserInfo({...userInfo, heightFT: value})}
+                    onChangeText={(value)=>verifyInput (value, "heightFT")}
+                    errorMessage={error.heightFT}
                     placeholder="ft" 
                     {...inputStyles}/>
 
                     <Input 
                     label=" " 
                     value={userInfo.heightIN}
-                    onChangeText={(value)=>setUserInfo({...userInfo, heightIN: value})}
+                    onChangeText={(value)=>verifyInput (value, "heightIN")}
+                    errorMessage={error.heightIN}
                     placeholder="in" 
                     {...inputStyles}/>
                 </View>
@@ -93,18 +124,20 @@ export default function Settings({navigation}){
                 <Input 
                 label="Calorie Goal"
                 value={userInfo.calorieGoal}
-                onChangeText={(value)=>setUserInfo({...userInfo, calorieGoal: value})}
+                onChangeText={(value)=>verifyInput (value, "calorieGoal")}
+                errorMessage={error.calorieGoal}
                 placeholder="cal" 
                 {...inputStyles}/>
 
                 <Input 
                 label="Time Goal" 
                 value={userInfo.timeGoal}
-                onChangeText={(value)=>setUserInfo({...userInfo, timeGoal: value})}
+                onChangeText={(value)=>verifyInput (value, "timeGoal")}
+                errorMessage={error.timeGoal}
                 placeholder="min" 
                 {...inputStyles}/>
             </View>
-            <Button title="save" onPress={handleSave}/>
+            <Button title="save" onPress={handleSave} disabled={disableSubmit}/>
         </SafeAreaView>
     )
 }

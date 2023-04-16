@@ -11,11 +11,12 @@ import {
 } from "react-native";
 import {Button} from "react-native-elements"
 import { styles } from "../App";
-
+import { IoIosArrowBack } from "react-icons/io";
 let timeInterval = null;
 export default function DurationExercise({ route, navigation }) {
   let [time, setTime] = useState(0);
   let [running, setRunning] = useState(false);
+  let [cal, setCal] = useState(0)
   // stop watch from instructor video with permission
   // each part of the timer
   let min = Math.floor((time / (100 * 60)) % 60)
@@ -25,14 +26,17 @@ export default function DurationExercise({ route, navigation }) {
     .toString()
     .padStart(2, "0");
   let mil = (time % 100).toString().padStart(2, "0");
-
+ console.log(cal)
   // update time
   let updateTime = useCallback(() => {
     if (running) {
+      const calc = Math.floor(route.params.met * 3.5 * 125 / 200 * 0.017) + cal
+      // console.log(route.params.met * 3.5 * 125 / 200 * 0.017+ cal)
+      setCal(calc)
       setTime((time) => time + 11);
     }
   }, [running]);
-
+  
   useEffect(() => {
     timeInterval = setTimeout(updateTime, 100);
     return () => clearInterval(timeInterval);
@@ -50,10 +54,21 @@ export default function DurationExercise({ route, navigation }) {
     setRunning(false);
   }, [setRunning]);
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={[styles.container, {paddingHorizontal:50}]}>
+      <View style={styles.row}>
+                <TouchableOpacity onPress={()=>navigation.navigate("Home")}>
+                    <IoIosArrowBack size={40}/>
+                </TouchableOpacity>
+
+                <View style={{textAlign:"center"}}>
+                    <Text style={[styles.heading2]}>{route.params.title}</Text>
+                </View>
+                <View/>
+            </View>
       <Text style={styles.data}>
         {min}:{sec}:{mil}
       </Text>
+      <Text style={{color:"white", textAlign:"center"}}>Calories Burned:{cal}</Text>
       <View style={styles.actionButtonContainer}>
         <Button 
         title="reset" 

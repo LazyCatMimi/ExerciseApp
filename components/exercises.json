@@ -1,18 +1,22 @@
 [
     {
       "name": "Push up",
-      "type" : "Repetition Exercise"
+      "type" : "Repetition Exercise",
+      "met": 8
     },
     {
       "name": "Plank",
-      "type" : "Repetition Exercise"
+      "type" : "Repetition Exercise",
+      "met": 5
     },
     {
       "name": "Bicycling",
-      "type" : "Duration Exercise"
+      "type" : "Duration Exercise",
+      "met":5.8 
     },
     {
       "name": "Walking",
-      "type" : "Duration Exercise"
+      "type" : "Duration Exercise",
+      "met": 8
     }
   ]
