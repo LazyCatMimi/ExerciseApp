@@ -16,16 +16,18 @@ import {
   export default function Home({ navigation }) {
     const exercises = require("./exercises.json");
     const isFocused = useIsFocused();
-          //get user data from local storage when component loads
-          let [userInfo, setUserInfo] = useState("")
+    //get user data from local storage when component loads
+    let [userInfo, setUserInfo] = useState("")
+    let [plans, setPlans] = useState([])
           
     useEffect ( ()=>{
       async function getUserInfo(){
-          try {
-              const value = await AsyncStorage.getItem('userInfo');
-              if (value !== null) {
-                  setUserInfo(JSON.parse(value))
-              }
+        try {
+            const getUser = await AsyncStorage.getItem('@userInfo');
+            getUser && setUserInfo(JSON.parse(getUser))
+
+            const getPlan = await AsyncStorage.getItem("@plans")
+            getPlan && setPlans(JSON.parse(getPlan))
         } catch (err) {
           console.error(err);
         }
@@ -51,14 +53,26 @@ import {
         </View>
 
         <View style={styles.smallBox}>
-            <Text style={{color:"white"}}>Daily Goal</Text>
+            <Text style={styles.heading3}>Daily Goal</Text>
             {
-              userInfo.calorieGoal || userInfo.timeGoal ?<><Text style={{color:"white"}}>{userInfo.calorieGoal && "0/" +userInfo.calorieGoal }</Text>
-              <Text style={{color:"white"}}>{userInfo.timeGoal && "0/" +userInfo.timeGoal}</Text></> : <Text style={{color:"white"}}>No goals set. go into settings to set a goal.</Text>
+              userInfo.calorieGoal || userInfo.timeGoal ?
+              <>
+                <Text style={styles.normalText}>{userInfo.calorieGoal && "0/" +userInfo.calorieGoal }</Text>
+                <Text style={styles.normalText}>{userInfo.timeGoal && "0/" +userInfo.timeGoal}</Text>
+              </> : 
+                <Text style={styles.normalText}>No goals set. go into settings to set a goal.</Text>
             }
 
         </View>
-        <Text style={styles.heading2}>Start an activity</Text>
+        <View style={styles.row}>
+          <Text style={[styles.heading2, {marginTop: 40}]}>Workout Plans</Text>
+            <Text style={styles.normalText}>{plans.length}/5</Text>
+        </View>
+        <TouchableOpacity style={{textAlign:"center"}}>
+          <Text style={styles.normalText}>New Plan</Text>
+        </TouchableOpacity>
+
+        <Text style={[styles.heading2, {marginTop: 40}]}>Start an activity</Text>
         <View style={styles.activitiesContainer}>
           <FlatList
           numColumns={2}

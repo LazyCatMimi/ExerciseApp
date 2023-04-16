@@ -57,7 +57,7 @@ export default function Settings({navigation}){
         //   on press of save button
       const handleSave = async ()=>{
         try {
-            await AsyncStorage.setItem('userInfo', JSON.stringify(userInfo));
+            await AsyncStorage.setItem('@userInfo', JSON.stringify(userInfo));
           } catch (err) {
             console.error(err);
           }
