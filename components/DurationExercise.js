@@ -17,6 +17,7 @@ export default function DurationExercise({ route, navigation }) {
   let [time, setTime] = useState(0);
   let [running, setRunning] = useState(false);
   let [cal, setCal] = useState(0)
+  let [totalTime, setTotalTime] = useState(0)
   // stop watch from instructor video with permission
   // each part of the timer
   let min = Math.floor((time / (100 * 60)) % 60)
@@ -26,16 +27,14 @@ export default function DurationExercise({ route, navigation }) {
     .toString()
     .padStart(2, "0");
   let mil = (time % 100).toString().padStart(2, "0");
- console.log(cal)
   // update time
   let updateTime = useCallback(() => {
     if (running) {
-      const calc = Math.floor(route.params.met * 3.5 * 125 / 200 * 0.017) + cal
-      // console.log(route.params.met * 3.5 * 125 / 200 * 0.017+ cal)
-      setCal(calc)
       setTime((time) => time + 11);
+      const calc = route.params.met * 3.5 * (125*0.45359237) / 200 * 0.017 + cal
+      setCal(calc)
     }
-  }, [running]);
+  }, [running,sec]);
   
   useEffect(() => {
     timeInterval = setTimeout(updateTime, 100);
@@ -49,6 +48,8 @@ export default function DurationExercise({ route, navigation }) {
   }, [running]);
 
   const reset = useCallback(() => {
+    setTotalTime(totalTime + time)
+    console.log(totalTime)
     setTime(0);
     clearInterval(timeInterval);
     setRunning(false);
@@ -68,7 +69,7 @@ export default function DurationExercise({ route, navigation }) {
       <Text style={styles.data}>
         {min}:{sec}:{mil}
       </Text>
-      <Text style={{color:"white", textAlign:"center"}}>Calories Burned:{cal}</Text>
+      <Text style={{color:"white", textAlign:"center"}}>Calories Burned: {cal.toFixed(2)}</Text>
       <View style={styles.actionButtonContainer}>
         <Button 
         title="reset" 

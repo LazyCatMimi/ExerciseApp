@@ -65,7 +65,6 @@ export default function Settings({navigation}){
       }
       const verifyInput = (value, property) => {
         const regex = /^[0-9\b]+$/;
-        console.log(value)
         setUserInfo({...userInfo, [property]: value})
         if (regex.test(value) || value.length === 0) {
           setError({...error, [property]: ""});
