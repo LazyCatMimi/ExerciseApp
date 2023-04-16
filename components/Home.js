@@ -5,11 +5,16 @@ import {
     TouchableOpacity,
     FlatList,
   } from "react-native";
+  import {useState} from "react"
   import {styles} from "../App"
   import {Button} from "react-native-elements"
+  import { FiSettings } from "react-icons/fi";
+  import AsyncStorage from '@react-native-async-storage/async-storage'
   
+
   export default function Home({ navigation }) {
     const exercises = require("./exercises.json");
+    
     const renderItem = ({ item }) => {
       return (
         <>
@@ -23,8 +28,11 @@ import {
     };
     return (
       <SafeAreaView style={[styles.container, {paddingHorizontal:50}]}>
-        <Text style={styles.title}>BuddyWorkout</Text>
-        <TouchableOpacity onPress={()=>navigation.navigate("Settings")}><Text>Settomgs</Text></TouchableOpacity>
+        <View style={styles.row}>
+          <Text style={styles.title}>BuddyWorkout</Text>
+          <TouchableOpacity onPress={()=>navigation.navigate("Settings")}><FiSettings color="white" size={40}/></TouchableOpacity>
+        </View>
+
         <View style={styles.smallBox}>
             <Text style={{color:"white"}}>Daily Goal</Text>
             <Text style={{color:"white"}}>0/0</Text>

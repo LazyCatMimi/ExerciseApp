@@ -14,7 +14,7 @@ const Stack = createNativeStackNavigator();
 export default function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Home">
+      <Stack.Navigator initialRouteName="Settings">
         <Stack.Screen 
           name="Home" 
           component={Home} />
@@ -44,8 +44,7 @@ export const styles = StyleSheet.create({
     flex: 1,
     paddingTop: Constants.statusBarHeight,
     backgroundColor: "#171722",
-    color: "#FFFFFF",
-    padding: 50
+    color: "#FFFFFF"
   },
   activitiesContainer:{
     alignItems:"center",
@@ -61,6 +60,11 @@ export const styles = StyleSheet.create({
     borderRadius:10,
     padding: 20,
     marginVertical: 20
+  },
+  row:{
+    alignItems: 'center',
+    justifyContent:"space-between",
+    flexDirection:"row"
   },
   // buttons
   activities: {
@@ -83,11 +87,15 @@ export const styles = StyleSheet.create({
   title:{
     fontSize: 40,
     fontWeight: "bold",
-    marginTop:20,
     color:"white"
   },
   heading2:{
-    fontSize: 25,
+    fontSize: 35,
+    fontWeight: "bold",
+    color:"white"
+  },
+  heading3:{
+    fontSize: 27,
     fontWeight: "bold",
     marginTop:20,
     color:"white"
@@ -98,5 +106,23 @@ export const styles = StyleSheet.create({
     fontWeight: "bold",
     marginTop:20,
     color:"white"
+  },
+
+  inputs:{
+    label:{
+      color:"white",
+      fontSize:20,
+      marginRight:10
+    },
+    containerStyle:{
+      width:"50%",
+      marginVertical: 20
+    },
+    basic:{
+      color:"white"
+    },
+    inputContainerStyle:{
+      borderBottomColor:"white"
+    }
   }
 });
