@@ -80,16 +80,16 @@ export default function Settings({navigation}){
       };
     return(
         <SafeAreaView style={[[styles.container, {paddingHorizontal:50}]]}>
-            <View style={styles.row}>
-                <TouchableOpacity onPress={()=>navigation.navigate("Home")}>
-                    <IoIosArrowBack size={40}/>
-                </TouchableOpacity>
+       <View>
+          <TouchableOpacity onPress={()=>navigation.navigate("Home")} style={{zIndex:3, position:"absolute"}}>
+              <IoIosArrowBack size={40}/>
+          </TouchableOpacity>
 
-                <View style={{textAlign:"center"}}>
-                    <Text style={[styles.heading2]}>Settings</Text>
-                </View>
-                <View/>
-            </View>
+          <View style={{width:"100%"}}>
+              <Text style={[styles.heading2, {textAlign:"center"}]}>Settings</Text>
+          </View>
+        </View>
+          <View/>
             <View style={styles.smallBox}>
             <Text style={[styles.heading3, {textAlign:"center"}]}>Body Composition</Text>
                 <Input 

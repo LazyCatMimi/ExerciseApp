@@ -12,6 +12,7 @@ import {
   import AsyncStorage from '@react-native-async-storage/async-storage'
   import { useIsFocused } from '@react-navigation/native';
 
+
   export default function Home({ navigation }) {
     const exercises = require("./exercises.json");
     const isFocused = useIsFocused();
@@ -37,7 +38,7 @@ import {
           <Button 
           title={item.name}
           buttonStyle={styles.activities}
-          onPress={() => navigation.navigate(item.type, {title: item.name, met: item.met})}>
+          onPress={() => navigation.navigate(item.type, {title: item.name, met: item.met, weight: userInfo.weight})}>
           </Button>
         </>
       );

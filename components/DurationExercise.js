@@ -31,7 +31,7 @@ export default function DurationExercise({ route, navigation }) {
   let updateTime = useCallback(() => {
     if (running) {
       setTime((time) => time + 11);
-      const calc = route.params.met * 3.5 * (125*0.45359237) / 200 * 0.017 + cal
+      const calc = route.params.met * 3.5 * (route.params.weight*0.45359237) / 200 * 0.017 + cal
       setCal(calc)
     }
   }, [running,sec]);
@@ -56,20 +56,19 @@ export default function DurationExercise({ route, navigation }) {
   }, [setRunning]);
   return (
     <SafeAreaView style={[styles.container, {paddingHorizontal:50}]}>
-      <View style={styles.row}>
-                <TouchableOpacity onPress={()=>navigation.navigate("Home")}>
-                    <IoIosArrowBack size={40}/>
-                </TouchableOpacity>
+       <View>
+          <TouchableOpacity onPress={()=>navigation.navigate("Home")} style={{zIndex:3, position:"absolute"}}>
+              <IoIosArrowBack size={40}/>
+          </TouchableOpacity>
 
-                <View style={{textAlign:"center"}}>
-                    <Text style={[styles.heading2]}>{route.params.title}</Text>
-                </View>
-                <View/>
-            </View>
+          <View style={{width:"100%"}}>
+              <Text style={[styles.heading2, {textAlign:"center"}]}>{route.params.title}</Text>
+          </View>
+        </View>
       <Text style={styles.data}>
         {min}:{sec}:{mil}
       </Text>
-      <Text style={{color:"white", textAlign:"center"}}>Calories Burned: {cal.toFixed(2)}</Text>
+      {route.params.weight && <Text style={{color:"white", textAlign:"center"}}>Calories Burned: {cal.toFixed(2)}</Text>}
       <View style={styles.actionButtonContainer}>
         <Button 
         title="reset" 
