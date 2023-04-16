@@ -53,7 +53,7 @@ import {
         </View>
 
         <View style={styles.smallBox}>
-            <Text style={styles.heading3}>Daily Goal</Text>
+            <Text style={styles.normalText}>Daily Goal</Text>
             {
               userInfo.calorieGoal || userInfo.timeGoal ?
               <>
@@ -68,7 +68,7 @@ import {
           <Text style={[styles.heading2, {marginTop: 40}]}>Workout Plans</Text>
             <Text style={styles.normalText}>{plans.length}/5</Text>
         </View>
-        <TouchableOpacity style={{textAlign:"center"}}>
+        <TouchableOpacity style={{textAlign:"center"}} onPress={()=>navigation.navigate("Plan", exercises)}>
           <Text style={styles.normalText}>New Plan</Text>
         </TouchableOpacity>
 
