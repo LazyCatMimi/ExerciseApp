@@ -77,7 +77,6 @@ export default function DurationExercise({ route, navigation }) {
         console.error(err);
       }
     }
-
     navigation.navigate("Home");
   };
   return (

@@ -40,11 +40,8 @@ export default function Home({ navigation }) {
     getUserInfo();
   }, [isFocused]);
   useEffect(() => {
-    console.log(userInfo.calorieGoal);
-
     if (userInfo.calorieGoal && history.length > 0) {
       const sum = history.reduce((accumulator, currentValue) => {
-        console.log(currentValue.caloriesBurned);
         return accumulator + currentValue.caloriesBurned;
       }, 0);
       setCalProgress(Math.ceil(sum));

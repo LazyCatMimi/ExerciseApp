@@ -23,6 +23,7 @@ export default function RepetitionExercise({ route, navigation }) {
   let [cal, setCal] = useState(0);
   let [totalTime, setTotalTime] = useState(0);
   let [showConfirmation, setShowConfirmation] = useState(false);
+  let [cachedSec, setCachedSet] = useState(0);
 
   // stop watch from instructor video with permission
   // each part of the timer
@@ -45,12 +46,20 @@ export default function RepetitionExercise({ route, navigation }) {
     return () => clearInterval(timeInterval);
   });
   useEffect(() => {
+    console.log(sec - cachedSec);
     const calc =
-      ((route.params.met * 3.5 * (route.params.weight * 0.45359237)) / 200) *
-        0.017 *
-        sec +
-      cal;
+      route.params.weight *
+      0.45359237 *
+      0.05 *
+      ((sec - cachedSec) / 60) *
+      (rep / 10);
+    // const calc =
+    //   ((route.params.met * 3.5 * (route.params.weight * 0.45359237)) / 200) *
+    //     0.017 *
+    //     sec +
+    //   cal;
     setCal(calc);
+    setCachedSet(sec);
   }, [rep]);
 
   const reset = useCallback(() => {
@@ -61,18 +70,20 @@ export default function RepetitionExercise({ route, navigation }) {
   }, [setRep]);
 
   const goBack = async () => {
-    const data = {
-      name: route.params.title,
-      caloriesBurned: cal.toFixed(2),
-      date: Date.now(),
-      timeElapsed: totalTime,
-    };
-    let cpy = route.params.history;
-    cpy.push(data);
-    try {
-      await AsyncStorage.setItem("@history", JSON.stringify(cpy));
-    } catch (err) {
-      console.error(err);
+    if (cal > 0) {
+      const data = {
+        name: route.params.title,
+        caloriesBurned: cal,
+        date: Date.now(),
+        timeElapsed: totalTime,
+      };
+      let cpy = route.params.history;
+      cpy.push(data);
+      try {
+        await AsyncStorage.setItem("@history", JSON.stringify(cpy));
+      } catch (err) {
+        console.error(err);
+      }
     }
     navigation.navigate("Home");
   };
