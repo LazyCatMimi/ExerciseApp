@@ -12,6 +12,9 @@ import {
 import { Button } from "react-native-elements";
 import { IoIosArrowBack } from "react-icons/io";
 import { styles } from "../App";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import Popup from "./Popup";
+
 export default function RepetitionExercise({ route, navigation }) {
   let [rep, setRep] = useState(0);
 
@@ -19,6 +22,8 @@ export default function RepetitionExercise({ route, navigation }) {
   let [running, setRunning] = useState(true);
   let [cal, setCal] = useState(0);
   let [totalTime, setTotalTime] = useState(0);
+  let [showConfirmation, setShowConfirmation] = useState(false);
+
   // stop watch from instructor video with permission
   // each part of the timer
   let min = Math.floor((time / (100 * 60)) % 60)
@@ -54,11 +59,39 @@ export default function RepetitionExercise({ route, navigation }) {
   const add = useCallback(() => {
     setRep((rep) => rep + 1);
   }, [setRep]);
+
+  const goBack = async () => {
+    const data = {
+      name: route.params.title,
+      caloriesBurned: cal.toFixed(2),
+      date: Date.now(),
+      timeElapsed: totalTime,
+    };
+    let cpy = route.params.history;
+    cpy.push(data);
+    try {
+      await AsyncStorage.setItem("@history", JSON.stringify(cpy));
+    } catch (err) {
+      console.error(err);
+    }
+    navigation.navigate("Home");
+  };
   return (
     <SafeAreaView style={[styles.container, { paddingHorizontal: 50 }]}>
+      {showConfirmation && (
+        <Popup
+          actionFunction={goBack}
+          setShowConfirmation={setShowConfirmation}
+          message="Go back?"
+          confirmButtonColor="#D86B6B"
+        />
+      )}
       <View>
         <TouchableOpacity
-          onPress={() => navigation.navigate("Home")}
+          onPress={() => {
+            setRunning(false);
+            setShowConfirmation(true);
+          }}
           style={{ zIndex: 3, position: "absolute" }}
         >
           <IoIosArrowBack size={40} />

@@ -21,14 +21,30 @@ export default function PlanEditScreen({ route, navigation }) {
     met: "",
     goal: "",
   };
+  const itemsA = route.params.exercises.map((item) => {
+    return { label: item.name, value: item.name };
+  });
   // when press add, push a new sample in
   const data = route.params.exercises.map((item) => {
     return { label: item.name, value: item.name };
   });
   let [planName, setPlanName] = useState("");
   let [exerciseList, setExerciseList] = useState([sample]);
-  const [value, setValue] = useState(null);
   const [isFocus, setIsFocus] = useState(false);
+  const [selectedValues, setSelectedValues] = useState([]);
+  const [value, setValue] = useState(null);
+  const [open, setOpen] = useState(false);
+  const [items, setItems] = useState(itemsA);
+
+  const handleValueChange = (value, index) => {
+    // const newValues = [...selectedValues];
+    // newValues[index] = value;
+    // setSelectedValues(newValues);
+    const cpy = exerciseList;
+    cpy[index].name = value;
+    setExerciseList(cpy);
+    console.log(value);
+  };
 
   const addExercise = () => {
     let cpy = exerciseList;
@@ -40,35 +56,29 @@ export default function PlanEditScreen({ route, navigation }) {
     navigation.navigate("Home");
   };
 
-  const renderItem = ({ item }) => {
-    return (
-      <View style={styles.smallBox}>
-        <Dropdown
-          // style={{ zIndex: 4, position: "absolute" }}
-          mode="modal"
-          maxHeight={300}
-          data={route.params.exercises}
-          labelField="name"
-          valueField="name"
-          value={value}
-          search
-          onFocus={() => setIsFocus(true)}
-          onBlur={() => setIsFocus(false)}
-          onChange={(val) => {
-            setValue(val.value);
-            setIsFocus(false);
-          }}
-        />
-        <Input
-          value={planName}
-          onChangeText={(value) => setPlanName(value)}
-          placeholder="min"
-          {...inputStyles}
-          containerStyle={{ width: "100%" }}
-        />
-      </View>
-    );
-  };
+  const renderItem = ({ item, index }) => (
+    <View style={styles.smallBox}>
+      <DropDownPicker
+        placeholder="Select a workout"
+        open={open}
+        value={item.name}
+        items={items}
+        setOpen={setOpen}
+        // setValue={setValue}
+        setValue={(value) => handleValueChange(value, index)}
+        setItems={setItems}
+        zIndex={3000}
+        zIndexInverse={1000}
+      />
+      <Input
+        value={planName}
+        onChangeText={(value) => setPlanName(value)}
+        placeholder="min"
+        {...inputStyles}
+        containerStyle={{ width: "100%" }}
+      />
+    </View>
+  );
 
   return (
     <SafeAreaView style={[styles.container, { paddingHorizontal: 50 }]}>
@@ -96,22 +106,13 @@ export default function PlanEditScreen({ route, navigation }) {
         />
       </View>
       <FlatList data={exerciseList} renderItem={renderItem} />
+
       {/* <View style={styles.smallBox}>
-        <Dropdown
-          // style={{ zIndex: 4, position: "absolute" }}
-          mode="modal"
-          maxHeight={300}
-          data={route.params.exercises}
-          labelField="name"
-          valueField="name"
+        <DropDownPicker
+          placeholder="Select an option"
           value={value}
-          search
-          onFocus={() => setIsFocus(true)}
-          onBlur={() => setIsFocus(false)}
-          onChange={(item) => {
-            setValue(item.value);
-            setIsFocus(false);
-          }}
+          items={items}
+          setValue={setValue}
         />
         <Input
           value={planName}

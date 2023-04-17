@@ -9,15 +9,19 @@ import {
   FlatList,
   ScrollView,
 } from "react-native";
-import {Button} from "react-native-elements"
+import { Button } from "react-native-elements";
 import { styles } from "../App";
 import { IoIosArrowBack } from "react-icons/io";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import Popup from "./Popup";
+
 let timeInterval = null;
 export default function DurationExercise({ route, navigation }) {
   let [time, setTime] = useState(0);
   let [running, setRunning] = useState(false);
-  let [cal, setCal] = useState(0)
-  let [totalTime, setTotalTime] = useState(0)
+  let [cal, setCal] = useState(0);
+  let [totalTime, setTotalTime] = useState(0);
+  let [showConfirmation, setShowConfirmation] = useState(false);
   // stop watch from instructor video with permission
   // each part of the timer
   let min = Math.floor((time / (100 * 60)) % 60)
@@ -31,11 +35,14 @@ export default function DurationExercise({ route, navigation }) {
   let updateTime = useCallback(() => {
     if (running) {
       setTime((time) => time + 11);
-      const calc = route.params.met * 3.5 * (route.params.weight*0.45359237) / 200 * 0.017 + cal
-      setCal(calc)
+      const calc =
+        ((route.params.met * 3.5 * (route.params.weight * 0.45359237)) / 200) *
+          0.017 +
+        cal;
+      setCal(calc);
     }
-  }, [running,sec]);
-  
+  }, [running, sec]);
+
   useEffect(() => {
     timeInterval = setTimeout(updateTime, 100);
     return () => clearInterval(timeInterval);
@@ -45,42 +52,78 @@ export default function DurationExercise({ route, navigation }) {
   const stopStart = useCallback(() => {
     setRunning(!running);
     clearInterval(timeInterval);
-  }, [running]);
+  });
 
   const reset = useCallback(() => {
-    setTotalTime(totalTime + time)
-    console.log(totalTime)
+    setTotalTime(totalTime + time);
     setTime(0);
     clearInterval(timeInterval);
     setRunning(false);
-  }, [setRunning]);
-  return (
-    <SafeAreaView style={[styles.container, {paddingHorizontal:50}]}>
-       <View>
-          <TouchableOpacity onPress={()=>navigation.navigate("Home")} style={{zIndex:3, position:"absolute"}}>
-              <IoIosArrowBack size={40}/>
-          </TouchableOpacity>
+  });
 
-          <View style={{width:"100%"}}>
-              <Text style={[styles.heading2, {textAlign:"center"}]}>{route.params.title}</Text>
-          </View>
+  const goBack = async () => {
+    const data = {
+      name: route.params.title,
+      caloriesBurned: cal.toFixed(2),
+      date: Date.now(),
+      timeElapsed: totalTime,
+    };
+    let cpy = route.params.history;
+    cpy.push(data);
+    try {
+      await AsyncStorage.setItem("@history", JSON.stringify(cpy));
+    } catch (err) {
+      console.error(err);
+    }
+    navigation.navigate("Home");
+  };
+  return (
+    <SafeAreaView style={[styles.container, { paddingHorizontal: 50 }]}>
+      {showConfirmation && (
+        <Popup
+          actionFunction={goBack}
+          setShowConfirmation={setShowConfirmation}
+          message="Go back?"
+          confirmButtonColor="#D86B6B"
+        />
+      )}
+      <View>
+        <TouchableOpacity
+          onPress={() => {
+            setRunning(false);
+            setShowConfirmation(true);
+          }}
+          style={{ zIndex: 3, position: "absolute" }}
+        >
+          <IoIosArrowBack size={40} />
+        </TouchableOpacity>
+
+        <View style={{ width: "100%" }}>
+          <Text style={[styles.heading2, { textAlign: "center" }]}>
+            {route.params.title}
+          </Text>
         </View>
+      </View>
       <Text style={styles.data}>
         {min}:{sec}:{mil}
       </Text>
-      {route.params.weight && <Text style={{color:"white", textAlign:"center"}}>Calories Burned: {cal.toFixed(2)}</Text>}
+      {route.params.weight && (
+        <Text style={{ color: "white", textAlign: "center" }}>
+          Calories Burned: {cal.toFixed(2)}
+        </Text>
+      )}
       <View style={styles.actionButtonContainer}>
-        <Button 
-        title="reset" 
-        onPress={reset} 
-        style={styles.button} 
-        buttonStyle={{ backgroundColor: "#AAAAAA" }}
+        <Button
+          title="reset"
+          onPress={reset}
+          style={styles.button}
+          buttonStyle={{ backgroundColor: "#AAAAAA" }}
         />
         <Button
           title={running ? "stop" : "start"}
           onPress={stopStart}
           style={styles.button}
-          buttonStyle={{ backgroundColor: running? "#AA1010" : "#10AA10"}}
+          buttonStyle={{ backgroundColor: running ? "#AA1010" : "#10AA10" }}
         />
       </View>
     </SafeAreaView>

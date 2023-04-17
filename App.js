@@ -87,17 +87,17 @@ export const styles = StyleSheet.create({
   },
   // text
   title: {
-    fontSize: 40,
-    fontWeight: "bold",
-    color: "white",
-  },
-  heading2: {
     fontSize: 35,
     fontWeight: "bold",
     color: "white",
   },
+  heading2: {
+    fontSize: 30,
+    fontWeight: "bold",
+    color: "white",
+  },
   heading3: {
-    fontSize: 27,
+    fontSize: 25,
     fontWeight: "bold",
     marginTop: 20,
     color: "white",
@@ -116,7 +116,7 @@ export const styles = StyleSheet.create({
   inputs: {
     label: {
       color: "white",
-      fontSize: 20,
+      fontSize: 15,
       marginRight: 10,
     },
     containerStyle: {

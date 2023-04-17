@@ -18,6 +18,7 @@ export default function Home({ navigation }) {
   //get user data from local storage when component loads
   let [userInfo, setUserInfo] = useState("");
   let [plans, setPlans] = useState([]);
+  let [history, setHistory] = useState([]);
 
   useEffect(() => {
     async function getUserInfo() {
@@ -27,6 +28,9 @@ export default function Home({ navigation }) {
 
         const getPlan = await AsyncStorage.getItem("@plans");
         getPlan && setPlans(JSON.parse(getPlan));
+
+        const getHistory = await AsyncStorage.getItem("@history");
+        getHistory && setHistory(JSON.parse(getHistory));
       } catch (err) {
         console.error(err);
       }
@@ -44,6 +48,7 @@ export default function Home({ navigation }) {
               title: item.name,
               met: item.met,
               weight: userInfo.weight,
+              history,
             })
           }
         ></Button>
