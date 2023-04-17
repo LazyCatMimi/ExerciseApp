@@ -101,7 +101,7 @@ export default function Settings({ navigation }) {
           actionFunction={() => navigation.navigate("Home")}
           setShowConfirmation={setShowConfirmation}
           message="You have unsaved changes. Go back?"
-          confirmButtonColor="#D86B6B"
+          confirmButtonColor="#2089DC"
         />
       )}
       <View>

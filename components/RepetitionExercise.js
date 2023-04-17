@@ -83,7 +83,7 @@ export default function RepetitionExercise({ route, navigation }) {
           actionFunction={goBack}
           setShowConfirmation={setShowConfirmation}
           message="Go back?"
-          confirmButtonColor="#D86B6B"
+          confirmButtonColor="#2089DC"
         />
       )}
       <View>

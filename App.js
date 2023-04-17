@@ -3,13 +3,13 @@ import Constants from "expo-constants";
 import { StyleSheet } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { useState } from "react";
 
 import DurationExercise from "./components/DurationExercise";
 import RepetitionExercise from "./components/RepetitionExercise";
 import Home from "./components/Home.js";
 import Settings from "./components/SettingsScreen.js";
 import PlanEditScreen from "./components/PlanScreen";
+import HistoryScreen from "./components/HistoryScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -34,6 +34,7 @@ export default function App() {
           options={({ route }) => ({ title: route.params.title })}
         />
         <Stack.Screen name="Settings" component={Settings} />
+        <Stack.Screen name="History" component={HistoryScreen} />
         <Stack.Screen name="Plan Edit" component={PlanEditScreen} />
       </Stack.Navigator>
     </NavigationContainer>
@@ -70,7 +71,7 @@ export const styles = StyleSheet.create({
   },
   // buttons
   activities: {
-    backgroundColor: "#3D3ACE",
+    backgroundColor: "#8F8EE1",
     margin: 10,
     padding: 20,
     borderRadius: 10,

@@ -62,19 +62,22 @@ export default function DurationExercise({ route, navigation }) {
   });
 
   const goBack = async () => {
-    const data = {
-      name: route.params.title,
-      caloriesBurned: cal.toFixed(2),
-      date: Date.now(),
-      timeElapsed: totalTime,
-    };
-    let cpy = route.params.history;
-    cpy.push(data);
-    try {
-      await AsyncStorage.setItem("@history", JSON.stringify(cpy));
-    } catch (err) {
-      console.error(err);
+    if (cal > 0) {
+      const data = {
+        name: route.params.title,
+        caloriesBurned: cal,
+        date: Date.now(),
+        timeElapsed: totalTime,
+      };
+      let cpy = route.params.history;
+      cpy.push(data);
+      try {
+        await AsyncStorage.setItem("@history", JSON.stringify(cpy));
+      } catch (err) {
+        console.error(err);
+      }
     }
+
     navigation.navigate("Home");
   };
   return (
@@ -84,7 +87,7 @@ export default function DurationExercise({ route, navigation }) {
           actionFunction={goBack}
           setShowConfirmation={setShowConfirmation}
           message="Go back?"
-          confirmButtonColor="#D86B6B"
+          confirmButtonColor="#2089DC"
         />
       )}
       <View>
@@ -123,7 +126,7 @@ export default function DurationExercise({ route, navigation }) {
           title={running ? "stop" : "start"}
           onPress={stopStart}
           style={styles.button}
-          buttonStyle={{ backgroundColor: running ? "#AA1010" : "#10AA10" }}
+          buttonStyle={{ backgroundColor: running ? "#AA1010" : "#5EB450" }}
         />
       </View>
     </SafeAreaView>

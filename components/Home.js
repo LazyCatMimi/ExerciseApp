@@ -19,6 +19,8 @@ export default function Home({ navigation }) {
   let [userInfo, setUserInfo] = useState("");
   let [plans, setPlans] = useState([]);
   let [history, setHistory] = useState([]);
+  let [calProgress, setCalProgress] = useState(0);
+  let [timeProgress, setTimeProgress] = useState(0);
 
   useEffect(() => {
     async function getUserInfo() {
@@ -37,6 +39,17 @@ export default function Home({ navigation }) {
     }
     getUserInfo();
   }, [isFocused]);
+  useEffect(() => {
+    console.log(userInfo.calorieGoal);
+
+    if (userInfo.calorieGoal && history.length > 0) {
+      const sum = history.reduce((accumulator, currentValue) => {
+        console.log(currentValue.caloriesBurned);
+        return accumulator + currentValue.caloriesBurned;
+      }, 0);
+      setCalProgress(Math.ceil(sum));
+    }
+  }, [userInfo]);
   const renderItem = ({ item }) => {
     return (
       <>
@@ -69,10 +82,12 @@ export default function Home({ navigation }) {
         {userInfo.calorieGoal || userInfo.timeGoal ? (
           <>
             <Text style={styles.normalText}>
-              {userInfo.calorieGoal && "0/" + userInfo.calorieGoal}
+              {userInfo.calorieGoal &&
+                `${calProgress} / ${userInfo.calorieGoal} cal`}
             </Text>
             <Text style={styles.normalText}>
-              {userInfo.timeGoal && "0/" + userInfo.timeGoal}
+              {userInfo.timeGoal &&
+                `${timeProgress} / ${userInfo.timeGoal} cal`}
             </Text>
           </>
         ) : (
@@ -81,7 +96,18 @@ export default function Home({ navigation }) {
           </Text>
         )}
       </View>
-      <View style={styles.row}>
+      <TouchableOpacity
+        onPress={() => {
+          navigation.navigate("History", history);
+        }}
+      >
+        <Text
+          style={[styles.normalText, { color: "#9A9CD0", textAlign: "center" }]}
+        >
+          View History
+        </Text>
+      </TouchableOpacity>
+      {/* <View style={styles.row}>
         <Text style={[styles.heading2, { marginTop: 40 }]}>Workout Plans</Text>
         <Text style={styles.normalText}>{plans.length}/5</Text>
       </View>
@@ -92,7 +118,7 @@ export default function Home({ navigation }) {
         }
       >
         <Text style={styles.normalText}>New Plan</Text>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
 
       <Text style={[styles.heading2, { marginTop: 40 }]}>
         Start an activity
