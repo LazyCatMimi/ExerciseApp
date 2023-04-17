@@ -23,7 +23,7 @@ export default function RepetitionExercise({ route, navigation }) {
   let [cal, setCal] = useState(0);
   let [totalTime, setTotalTime] = useState(0);
   let [showConfirmation, setShowConfirmation] = useState(false);
-  let [cachedSec, setCachedSet] = useState(0);
+  let [cachedSec, setCachedSec] = useState(0);
 
   // stop watch from instructor video with permission
   // each part of the timer
@@ -38,6 +38,7 @@ export default function RepetitionExercise({ route, navigation }) {
   let updateTime = useCallback(() => {
     if (running) {
       setTime((time) => time + 11);
+      Number(sec) == 0 && setCachedSec(cachedSec + 59);
     }
   }, [running]);
 
@@ -46,20 +47,14 @@ export default function RepetitionExercise({ route, navigation }) {
     return () => clearInterval(timeInterval);
   });
   useEffect(() => {
-    console.log(sec - cachedSec);
+    console.log(Number(sec) + 59 * Number(min));
+    // calculate based on how much calories burned per sec * how many seconds have passed
     const calc =
-      route.params.weight *
-      0.45359237 *
-      0.05 *
-      ((sec - cachedSec) / 60) *
-      (rep / 10);
-    // const calc =
-    //   ((route.params.met * 3.5 * (route.params.weight * 0.45359237)) / 200) *
-    //     0.017 *
-    //     sec +
-    //   cal;
+      ((route.params.met * 3.5 * (route.params.weight * 0.45359237)) / 200) *
+      0.017 *
+      (Number(sec) + 59 * Number(min));
     setCal(calc);
-    setCachedSet(sec);
+    setCachedSec(sec);
   }, [rep]);
 
   const reset = useCallback(() => {
