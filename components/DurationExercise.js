@@ -27,6 +27,10 @@ export default function DurationExercise({ route, navigation }) {
       confirmButtonColor: "#2089DC",
     },
   };
+  const initGoal = {
+    min: "",
+    sec: "",
+  };
   // states for basic functions
   let [time, setTime] = useState(0);
   let [running, setRunning] = useState(false);
@@ -37,9 +41,9 @@ export default function DurationExercise({ route, navigation }) {
 
   // states for goal
   let [checked, setChecked] = useState(false);
-  let [goal, setGoal] = useState("");
-  let [goalErr, setGoalErr] = useState("");
-  let [cachedGoal, setCachedGoal] = useState("");
+  let [goal, setGoal] = useState(initGoal);
+  let [goalErr, setGoalErr] = useState(initGoal);
+  let [cachedGoal, setCachedGoal] = useState(initGoal);
   let [icon, setIcon] = useState(false);
   let [popupProps, setPopupProps] = useState(popupMessages.back);
 
@@ -102,14 +106,17 @@ export default function DurationExercise({ route, navigation }) {
     }
     navigation.navigate("Home");
   };
-  const checkGoalInput = (value) => {
+  const checkGoalInput = (value, type) => {
     const regex = /^[0-9\b]+$/;
-    if (regex.test(value) || value.length == 0) {
-      setGoalErr("");
+    if (type == "sec" && value > 59) {
+      setGoalErr({ ...goalErr, [type]: "Seconds cannot exceed 59" });
+    } else if (regex.test(value) || !value) {
+      setGoalErr({ ...goalErr, [type]: "" });
     } else {
-      setGoalErr("Please enter only numbers.");
+      setGoalErr({ ...goalErr, [type]: "Please enter only numbers." });
     }
-    if (value != cachedGoal) {
+    // set checked icon hidden for button if userInput is not equal to saved goal and if there's no input
+    if (value != cachedGoal[type] || !value) {
       setIcon(false);
     } else {
       setIcon(true);
@@ -117,8 +124,8 @@ export default function DurationExercise({ route, navigation }) {
   };
   const dontReset = () => {
     setChecked(false);
-    setCachedGoal("");
-    setGoal("");
+    setCachedGoal(initGoal);
+    setGoal(initGoal);
     setIcon(false);
   };
   return (
@@ -175,13 +182,23 @@ export default function DurationExercise({ route, navigation }) {
       {checked && (
         <>
           <Input
-            placeholder="reps"
-            label="Set a goal for the amount of reps you want to achieve in this session."
-            value={goal}
-            errorMessage={goalErr}
+            placeholder="min"
+            label="Set a goal for the amount of time you want to achieve in this session."
+            value={goal.min}
+            errorMessage={goalErr.min}
             onChangeText={(value) => {
-              setGoal(value);
-              checkGoalInput(value);
+              setGoal({ ...goal, min: value });
+              checkGoalInput(value, "min");
+            }}
+            style={styles.inputs.basic}
+          />
+          <Input
+            placeholder="sec"
+            value={goal.sec}
+            errorMessage={goalErr.sec}
+            onChangeText={(value) => {
+              setGoal({ ...goal, sec: value });
+              checkGoalInput(value, "sec");
             }}
             style={styles.inputs.basic}
           />
@@ -190,9 +207,14 @@ export default function DurationExercise({ route, navigation }) {
             icon={icon && <BsCheck color="green" size={20} />}
             // disable if theres an error, no input, or input==cached input
             disabled={
-              goalErr.length != 0 || goal.length == 0 || goal == cachedGoal
+              goalErr.min.length ||
+              goalErr.sec.length ||
+              (!goal.min && !goal.sec) ||
+              (goal.min === cachedGoal.min && goal.sec === cachedGoal.sec)
             }
             onPress={() => {
+              !goal.min && setGoal({ ...goal, min: 0 });
+              !goal.sec && setGoal({ ...goal, sec: 0 });
               setCachedGoal(goal);
               setIcon(true);
             }}

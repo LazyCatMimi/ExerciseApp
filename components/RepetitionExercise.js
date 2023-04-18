@@ -105,12 +105,13 @@ export default function RepetitionExercise({ route, navigation }) {
 
   const checkGoalInput = (value) => {
     const regex = /^[0-9\b]+$/;
-    if (regex.test(value) || value.length == 0) {
+    if (regex.test(value) || !value) {
       setGoalErr("");
     } else {
       setGoalErr("Please enter only numbers.");
     }
-    if (value != cachedGoal) {
+    // set checked icon hidden for button if userInput is not equal to saved goal and if there's no input
+    if (value != cachedGoal || !value) {
       setIcon(false);
     } else {
       setIcon(true);
@@ -205,9 +206,7 @@ export default function RepetitionExercise({ route, navigation }) {
             title="set"
             icon={icon && <BsCheck color="green" size={20} />}
             // disable if theres an error, no input, or input==cached input
-            disabled={
-              goalErr.length != 0 || goal.length == 0 || goal == cachedGoal
-            }
+            disabled={goalErr.length || !goal || goal == cachedGoal}
             onPress={() => {
               setCachedGoal(goal);
               setIcon(true);
