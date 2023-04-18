@@ -106,12 +106,12 @@ export default function DurationExercise({ route, navigation }) {
       const data = {
         name: route.params.name,
         type: route.params.type,
-        caloriesBurned: totalCal,
+        caloriesBurned: totalCal + cal,
         date: Date.now(),
-        timeElapsed: totalTime,
+        timeElapsed: totalTime + time,
       };
       let cpy = route.params.history;
-      cpy.push(data);
+      cpy = [data, ...cpy];
       try {
         await AsyncStorage.setItem("@history", JSON.stringify(cpy));
       } catch (err) {

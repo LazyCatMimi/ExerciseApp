@@ -94,7 +94,7 @@ export default function Home({ navigation }) {
       </View>
       <TouchableOpacity
         onPress={() => {
-          navigation.navigate("History", history);
+          navigation.navigate("History", { history });
         }}
       >
         <Text
