@@ -21,7 +21,7 @@ export default function DurationExercise({ route, navigation }) {
       cancelFunction: () => reset(),
       actionFunction: () => dontReset(),
       setShowConfirmation: () => setShowConfirmation(),
-      message: "You have achieved your rep goal!",
+      message: "You have achieved your time goal!",
       cancelMessage: "Reset and continue",
       confirmMessage: "Don't reset and continue",
       confirmButtonColor: "#2089DC",
@@ -46,6 +46,7 @@ export default function DurationExercise({ route, navigation }) {
   let [cachedGoal, setCachedGoal] = useState(initGoal);
   let [icon, setIcon] = useState(false);
   let [popupProps, setPopupProps] = useState(popupMessages.back);
+  let [disabled, setDisabled] = useState(false);
 
   // each part of the timer
   let min = Math.floor((time / (100 * 60)) % 60)
@@ -58,7 +59,7 @@ export default function DurationExercise({ route, navigation }) {
   // update time
   let updateTime = useCallback(() => {
     if (running) {
-      setTime((time) => time + 11);
+      setTime((time) => time + 12);
       const calc =
         ((route.params.met * 3.5 * (route.params.weight * 0.45359237)) / 200) *
           0.017 +
@@ -66,6 +67,19 @@ export default function DurationExercise({ route, navigation }) {
       setCal(calc);
     }
   }, [running, sec]);
+
+  // check to see if goal is met.
+  useEffect(() => {
+    if (
+      cachedGoal.min &&
+      cachedGoal.min == parseInt(min) &&
+      parseInt(sec) >= cachedGoal.sec
+    ) {
+      setRunning(false);
+      setPopupProps(popupMessages.goalAchieved);
+      setShowConfirmation(true);
+    }
+  }, [cachedGoal, sec, min]);
 
   useEffect(() => {
     timeInterval = setTimeout(updateTime, 100);
@@ -107,6 +121,7 @@ export default function DurationExercise({ route, navigation }) {
     navigation.navigate("Home");
   };
   const checkGoalInput = (value, type) => {
+    setDisabled(false);
     const regex = /^[0-9\b]+$/;
     if (type == "sec" && value > 59) {
       setGoalErr({ ...goalErr, [type]: "Seconds cannot exceed 59" });
@@ -128,6 +143,7 @@ export default function DurationExercise({ route, navigation }) {
     setGoal(initGoal);
     setIcon(false);
   };
+
   return (
     <SafeAreaView style={[styles.container, { paddingHorizontal: 50 }]}>
       {showConfirmation && <Popup {...popupProps} />}
@@ -150,7 +166,7 @@ export default function DurationExercise({ route, navigation }) {
         </View>
       </View>
       <Text style={styles.data}>
-        {min}:{sec}:{mil}
+        {min}:{sec}.{mil}
       </Text>
       {route.params.weight && (
         <Text style={{ color: "white", textAlign: "center" }}>
@@ -175,7 +191,13 @@ export default function DurationExercise({ route, navigation }) {
         title="set goal"
         center
         checked={checked}
-        onPress={() => setChecked(!checked)}
+        onPress={() => {
+          setChecked(!checked);
+          setGoal(initGoal);
+          setGoalErr(initGoal);
+          setCachedGoal(initGoal);
+          setIcon(false);
+        }}
         containerStyle={{ margin: 0, backgroundColor: "none", border: "none" }}
         textStyle={{ color: "white" }}
       />
@@ -210,13 +232,21 @@ export default function DurationExercise({ route, navigation }) {
               goalErr.min.length ||
               goalErr.sec.length ||
               (!goal.min && !goal.sec) ||
-              (goal.min === cachedGoal.min && goal.sec === cachedGoal.sec)
+              (goal.min === cachedGoal.min && goal.sec === cachedGoal.sec) ||
+              disabled
             }
             onPress={() => {
-              !goal.min && setGoal({ ...goal, min: 0 });
-              !goal.sec && setGoal({ ...goal, sec: 0 });
-              setCachedGoal(goal);
+              let cpy = goal;
+              if (!goal.min) {
+                cpy.min = 0;
+              }
+              if (!goal.sec) {
+                cpy.sec = 0;
+              }
+              setGoal({ ...cpy });
+              setCachedGoal({ ...cpy });
               setIcon(true);
+              setDisabled(true);
             }}
           />
         </>

@@ -64,7 +64,7 @@ export default function RepetitionExercise({ route, navigation }) {
   // update time
   let updateTime = useCallback(() => {
     if (running) {
-      setTime((time) => time + 11);
+      setTime((time) => time + 12);
     }
   }, [running]);
 
@@ -98,6 +98,7 @@ export default function RepetitionExercise({ route, navigation }) {
     }
     setRep(rep + 1);
     if (cachedGoal && rep + 1 == cachedGoal) {
+      setRunning(false);
       setPopupProps(popupMessages.goalAchieved);
       setShowConfirmation(true);
     }
@@ -185,7 +186,13 @@ export default function RepetitionExercise({ route, navigation }) {
         title="set goal"
         center
         checked={checked}
-        onPress={() => setChecked(!checked)}
+        onPress={() => {
+          setChecked(!checked);
+          setGoal("");
+          setGoalErr("");
+          setCachedGoal("");
+          setIcon(false);
+        }}
         containerStyle={{ margin: 0, backgroundColor: "none", border: "none" }}
         textStyle={{ color: "white" }}
       />
