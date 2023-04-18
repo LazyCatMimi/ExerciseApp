@@ -20,6 +20,7 @@ export default function DurationExercise({ route, navigation }) {
   let [time, setTime] = useState(0);
   let [running, setRunning] = useState(false);
   let [cal, setCal] = useState(0);
+  let [totalCal, setTotalCal] = useState(0);
   let [totalTime, setTotalTime] = useState(0);
   let [showConfirmation, setShowConfirmation] = useState(false);
   // stop watch from instructor video with permission
@@ -56,15 +57,18 @@ export default function DurationExercise({ route, navigation }) {
 
   const reset = useCallback(() => {
     setTotalTime(totalTime + time);
+    setTotalCal(totalCal + cal);
     setTime(0);
+    setCal(0);
     clearInterval(timeInterval);
     setRunning(false);
   });
 
   const goBack = async () => {
-    if (cal > 0) {
+    if (cal > 0 || totalCal > 0) {
       const data = {
-        name: route.params.title,
+        name: route.params.name,
+        type: route.params.type,
         caloriesBurned: cal,
         date: Date.now(),
         timeElapsed: totalTime,
@@ -102,7 +106,7 @@ export default function DurationExercise({ route, navigation }) {
 
         <View style={{ width: "100%" }}>
           <Text style={[styles.heading2, { textAlign: "center" }]}>
-            {route.params.title}
+            {route.params.name}
           </Text>
         </View>
       </View>
@@ -119,7 +123,7 @@ export default function DurationExercise({ route, navigation }) {
           title="reset"
           onPress={reset}
           style={styles.button}
-          buttonStyle={{ backgroundColor: "#AAAAAA" }}
+          buttonStyle={{ backgroundColor: "#33383F" }}
         />
         <Button
           title={running ? "stop" : "start"}

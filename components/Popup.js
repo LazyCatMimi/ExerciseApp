@@ -2,13 +2,11 @@ import * as React from "react";
 import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 
 export default function Popup(props) {
-  const { actionFunction, setShowConfirmation, message, confirmButtonColor } =
-    props;
   return (
     <View style={styles.overlay}>
       <View style={styles.floatingBox}>
         <Text style={[styles.sectionTitle, { textAlign: "center" }]}>
-          {message}
+          {props.message}
         </Text>
 
         <View
@@ -19,25 +17,29 @@ export default function Popup(props) {
           }}
         >
           <TouchableOpacity
-            onPress={() => setShowConfirmation(false)}
+            onPress={() => props.setShowConfirmation(false)}
             style={[
               styles.confirmButton,
               { backgroundColor: "#33383F", marginRight: 20 },
             ]}
           >
-            <Text style={styles.whiteText}>Cancel</Text>
+            <Text style={styles.whiteText}>
+              {props.cancelMessage ? props.cancelMessage : "Cancel"}
+            </Text>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {
-              actionFunction();
-              setShowConfirmation(false);
+              props.actionFunction();
+              props.setShowConfirmation(false);
             }}
             style={[
               styles.confirmButton,
-              { backgroundColor: confirmButtonColor, marginLeft: 20 },
+              { backgroundColor: props.confirmButtonColor, marginLeft: 20 },
             ]}
           >
-            <Text>Confirm</Text>
+            <Text>
+              {props.confirmMessage ? props.confirmMessage : "Confirm"}
+            </Text>
           </TouchableOpacity>
         </View>
       </View>

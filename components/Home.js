@@ -55,8 +55,7 @@ export default function Home({ navigation }) {
           buttonStyle={styles.activities}
           onPress={() =>
             navigation.navigate(item.type, {
-              title: item.name,
-              met: item.met,
+              ...item,
               weight: userInfo.weight,
               history,
             })
