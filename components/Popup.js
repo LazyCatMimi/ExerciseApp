@@ -17,7 +17,10 @@ export default function Popup(props) {
           }}
         >
           <TouchableOpacity
-            onPress={() => props.setShowConfirmation(false)}
+            onPress={() => {
+              props.cancelFunction && props.cancelFunction();
+              props.setShowConfirmation(false);
+            }}
             style={[
               styles.confirmButton,
               { backgroundColor: "#33383F", marginRight: 20 },

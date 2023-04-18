@@ -18,6 +18,24 @@ import Popup from "./Popup";
 
 let timeInterval = null;
 export default function RepetitionExercise({ route, navigation }) {
+  const popupMessages = {
+    back: {
+      actionFunction: () => goBack(),
+      setShowConfirmation: () => setShowConfirmation(),
+      message: "Go back?",
+      confirmButtonColor: "#2089DC",
+    },
+    goalAchieved: {
+      cancelFunction: () => reset(),
+      actionFunction: () => dontReset(),
+      setShowConfirmation: () => setShowConfirmation(),
+      message: "You have achieved your rep goal!",
+      cancelMessage: "Reset and continue",
+      confirmMessage: "Don't reset and continue",
+      confirmButtonColor: "#2089DC",
+    },
+  };
+  // states for basic functions
   let [rep, setRep] = useState(0);
   let [time, setTime] = useState(0);
   let [running, setRunning] = useState(false);
@@ -26,11 +44,14 @@ export default function RepetitionExercise({ route, navigation }) {
   let [totalTime, setTotalTime] = useState(0);
   let [totalRep, setTotalRep] = useState(0);
   let [showConfirmation, setShowConfirmation] = useState(false);
+
+  // states for goal
   let [checked, setChecked] = useState(false);
   let [goal, setGoal] = useState("");
   let [goalErr, setGoalErr] = useState("");
   let [cachedGoal, setCachedGoal] = useState("");
   let [icon, setIcon] = useState(false);
+  let [popupProps, setPopupProps] = useState(popupMessages.back);
 
   // each part of the timer
   let min = Math.floor((time / (100 * 60)) % 60)
@@ -52,7 +73,6 @@ export default function RepetitionExercise({ route, navigation }) {
     return () => clearInterval(timeInterval);
   });
   useEffect(() => {
-    console.log(Number(sec) + 59 * Number(min));
     // calculate based on how much calories burned per sec * how many seconds have passed
     const calc =
       ((route.params.met * 3.5 * (route.params.weight * 0.45359237)) / 200) *
@@ -73,13 +93,13 @@ export default function RepetitionExercise({ route, navigation }) {
   });
   const add = useCallback(() => {
     if (!running) {
-      console.log("ran");
       setRunning(true);
       clearInterval(timeInterval);
     }
-    setRep((rep) => rep + 1);
-    if (checked && rep == goal) {
-      //umm
+    setRep(rep + 1);
+    if (cachedGoal && rep + 1 == cachedGoal) {
+      setPopupProps(popupMessages.goalAchieved);
+      setShowConfirmation(true);
     }
   });
 
@@ -117,20 +137,20 @@ export default function RepetitionExercise({ route, navigation }) {
     }
     navigation.navigate("Home");
   };
+  const dontReset = () => {
+    setChecked(false);
+    setCachedGoal("");
+    setGoal("");
+    setIcon(false);
+  };
   return (
     <SafeAreaView style={[styles.container, { paddingHorizontal: 50 }]}>
-      {showConfirmation && (
-        <Popup
-          actionFunction={goBack}
-          setShowConfirmation={setShowConfirmation}
-          message="Go back?"
-          confirmButtonColor="#2089DC"
-        />
-      )}
+      {showConfirmation && <Popup {...popupProps} />}
       <View>
         <TouchableOpacity
           onPress={() => {
             setRunning(false);
+            setPopupProps(popupMessages.back);
             setShowConfirmation(true);
           }}
           style={{ zIndex: 3, position: "absolute" }}
@@ -159,7 +179,7 @@ export default function RepetitionExercise({ route, navigation }) {
         />
         <Button title="+" onPress={add} style={styles.button} />
       </View>
-      {/* <Button title="set goal" style={styles.button} /> */}
+
       <CheckBox
         title="set goal"
         center
@@ -193,7 +213,6 @@ export default function RepetitionExercise({ route, navigation }) {
               setIcon(true);
             }}
           />
-          {/* on press set goal & set cached goal// disable if cached goal === goal */}
         </>
       )}
     </SafeAreaView>

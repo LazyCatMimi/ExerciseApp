@@ -1,29 +1,48 @@
 import * as React from "react";
 import { useState, useEffect, useCallback } from "react";
-import {
-  Text,
-  View,
-  StyleSheet,
-  SafeAreaView,
-  TouchableOpacity,
-  FlatList,
-  ScrollView,
-} from "react-native";
-import { Button } from "react-native-elements";
+import { Text, View, SafeAreaView, TouchableOpacity } from "react-native";
+import { Button, Input, CheckBox } from "react-native-elements";
 import { styles } from "../App";
 import { IoIosArrowBack } from "react-icons/io";
+import { BsCheck } from "react-icons/bs";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Popup from "./Popup";
 
 let timeInterval = null;
 export default function DurationExercise({ route, navigation }) {
+  const popupMessages = {
+    back: {
+      actionFunction: () => goBack(),
+      setShowConfirmation: () => setShowConfirmation(),
+      message: "Go back?",
+      confirmButtonColor: "#2089DC",
+    },
+    goalAchieved: {
+      cancelFunction: () => reset(),
+      actionFunction: () => dontReset(),
+      setShowConfirmation: () => setShowConfirmation(),
+      message: "You have achieved your rep goal!",
+      cancelMessage: "Reset and continue",
+      confirmMessage: "Don't reset and continue",
+      confirmButtonColor: "#2089DC",
+    },
+  };
+  // states for basic functions
   let [time, setTime] = useState(0);
   let [running, setRunning] = useState(false);
   let [cal, setCal] = useState(0);
   let [totalCal, setTotalCal] = useState(0);
   let [totalTime, setTotalTime] = useState(0);
   let [showConfirmation, setShowConfirmation] = useState(false);
-  // stop watch from instructor video with permission
+
+  // states for goal
+  let [checked, setChecked] = useState(false);
+  let [goal, setGoal] = useState("");
+  let [goalErr, setGoalErr] = useState("");
+  let [cachedGoal, setCachedGoal] = useState("");
+  let [icon, setIcon] = useState(false);
+  let [popupProps, setPopupProps] = useState(popupMessages.back);
+
   // each part of the timer
   let min = Math.floor((time / (100 * 60)) % 60)
     .toString()
@@ -69,7 +88,7 @@ export default function DurationExercise({ route, navigation }) {
       const data = {
         name: route.params.name,
         type: route.params.type,
-        caloriesBurned: cal,
+        caloriesBurned: totalCal,
         date: Date.now(),
         timeElapsed: totalTime,
       };
@@ -83,20 +102,33 @@ export default function DurationExercise({ route, navigation }) {
     }
     navigation.navigate("Home");
   };
+  const checkGoalInput = (value) => {
+    const regex = /^[0-9\b]+$/;
+    if (regex.test(value) || value.length == 0) {
+      setGoalErr("");
+    } else {
+      setGoalErr("Please enter only numbers.");
+    }
+    if (value != cachedGoal) {
+      setIcon(false);
+    } else {
+      setIcon(true);
+    }
+  };
+  const dontReset = () => {
+    setChecked(false);
+    setCachedGoal("");
+    setGoal("");
+    setIcon(false);
+  };
   return (
     <SafeAreaView style={[styles.container, { paddingHorizontal: 50 }]}>
-      {showConfirmation && (
-        <Popup
-          actionFunction={goBack}
-          setShowConfirmation={setShowConfirmation}
-          message="Go back?"
-          confirmButtonColor="#2089DC"
-        />
-      )}
+      {showConfirmation && <Popup {...popupProps} />}
       <View>
         <TouchableOpacity
           onPress={() => {
             setRunning(false);
+            setPopupProps(popupMessages.back);
             setShowConfirmation(true);
           }}
           style={{ zIndex: 3, position: "absolute" }}
@@ -132,6 +164,41 @@ export default function DurationExercise({ route, navigation }) {
           buttonStyle={{ backgroundColor: running ? "#AA1010" : "#5EB450" }}
         />
       </View>
+      <CheckBox
+        title="set goal"
+        center
+        checked={checked}
+        onPress={() => setChecked(!checked)}
+        containerStyle={{ margin: 0, backgroundColor: "none", border: "none" }}
+        textStyle={{ color: "white" }}
+      />
+      {checked && (
+        <>
+          <Input
+            placeholder="reps"
+            label="Set a goal for the amount of reps you want to achieve in this session."
+            value={goal}
+            errorMessage={goalErr}
+            onChangeText={(value) => {
+              setGoal(value);
+              checkGoalInput(value);
+            }}
+            style={styles.inputs.basic}
+          />
+          <Button
+            title="set"
+            icon={icon && <BsCheck color="green" size={20} />}
+            // disable if theres an error, no input, or input==cached input
+            disabled={
+              goalErr.length != 0 || goal.length == 0 || goal == cachedGoal
+            }
+            onPress={() => {
+              setCachedGoal(goal);
+              setIcon(true);
+            }}
+          />
+        </>
+      )}
     </SafeAreaView>
   );
 }
