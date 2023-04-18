@@ -11,6 +11,7 @@ import { Button } from "react-native-elements";
 import { FiSettings } from "react-icons/fi";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useIsFocused } from "@react-navigation/native";
+import { ProgressBar } from "react-native-paper";
 
 export default function Home({ navigation }) {
   const exercises = require("./exercises.json");
@@ -21,7 +22,13 @@ export default function Home({ navigation }) {
   let [history, setHistory] = useState([]);
   let [calProgress, setCalProgress] = useState(0);
   let [timeProgress, setTimeProgress] = useState(0);
-
+  const dateToString = (timeStamp) => {
+    const date = new Date(timeStamp);
+    const month = (date.getMonth() + 1).toString().padStart(2, "0");
+    const day = date.getDate().toString().padStart(2, "0");
+    const year = date.getFullYear();
+    return `${month}/${day}/${year}`;
+  };
   useEffect(() => {
     async function getUserInfo() {
       try {
@@ -40,11 +47,24 @@ export default function Home({ navigation }) {
     getUserInfo();
   }, [isFocused]);
   useEffect(() => {
-    if (userInfo.calorieGoal && history.length > 0) {
+    const today = dateToString(new Date());
+    if (userInfo.calorieGoal && history.length) {
       const sum = history.reduce((accumulator, currentValue) => {
-        return accumulator + currentValue.caloriesBurned;
+        if (dateToString(currentValue.date) == today) {
+          return accumulator + currentValue.caloriesBurned;
+        }
+        return accumulator;
       }, 0);
-      setCalProgress(Math.ceil(sum));
+      setCalProgress(Math.round(sum));
+    }
+    if (userInfo.timeGoal && history.length) {
+      const sum = history.reduce((accumulator, currentValue) => {
+        if (dateToString(currentValue.date) == today) {
+          return accumulator + ((currentValue.timeElapsed / 100) % 60);
+        }
+        return accumulator;
+      }, 0);
+      setTimeProgress(Math.round(sum / 60));
     }
   }, [userInfo]);
   const renderItem = ({ item }) => {
@@ -67,7 +87,9 @@ export default function Home({ navigation }) {
   return (
     <SafeAreaView style={[styles.container, { paddingHorizontal: 50 }]}>
       <View style={styles.row}>
-        <Text style={styles.title}>BuddyWorkout</Text>
+        <Text style={styles.title}>
+          <Text style={{ color: "#8F8EE1" }}>Buddy</Text>Workout
+        </Text>
         <TouchableOpacity onPress={() => navigation.navigate("Settings")}>
           <FiSettings color="white" size={40} />
         </TouchableOpacity>
@@ -77,14 +99,30 @@ export default function Home({ navigation }) {
         <Text style={styles.normalText}>Daily Goal</Text>
         {userInfo.calorieGoal || userInfo.timeGoal ? (
           <>
-            <Text style={styles.normalText}>
-              {userInfo.calorieGoal &&
-                `${calProgress} / ${userInfo.calorieGoal} cal`}
-            </Text>
-            <Text style={styles.normalText}>
-              {userInfo.timeGoal &&
-                `${timeProgress} / ${userInfo.timeGoal} cal`}
-            </Text>
+            <View style={styles.row}>
+              <ProgressBar
+                progress={calProgress / userInfo.calorieGoal}
+                color={"#090924"}
+                visible={userInfo.calorieGoal}
+                style={{ width: 200, height: 10, borderRadius: 10 }}
+              />
+              <Text style={styles.normalText}>
+                {userInfo.calorieGoal &&
+                  `${calProgress} / ${userInfo.calorieGoal} cal`}
+              </Text>
+            </View>
+            <View style={styles.row}>
+              <ProgressBar
+                progress={timeProgress / userInfo.timeGoal}
+                color={"#090924"}
+                visible={userInfo.timeGoal}
+                style={{ width: 200, height: 10, borderRadius: 10 }}
+              />
+              <Text style={styles.normalText}>
+                {userInfo.timeGoal &&
+                  `${timeProgress} / ${userInfo.timeGoal} min`}
+              </Text>
+            </View>
           </>
         ) : (
           <Text style={styles.normalText}>
@@ -103,18 +141,6 @@ export default function Home({ navigation }) {
           View History
         </Text>
       </TouchableOpacity>
-      {/* <View style={styles.row}>
-        <Text style={[styles.heading2, { marginTop: 40 }]}>Workout Plans</Text>
-        <Text style={styles.normalText}>{plans.length}/5</Text>
-      </View>
-      <TouchableOpacity
-        style={{ textAlign: "center" }}
-        onPress={() =>
-          navigation.navigate("Plan Edit", { exercises: exercises })
-        }
-      >
-        <Text style={styles.normalText}>New Plan</Text>
-      </TouchableOpacity> */}
 
       <Text style={[styles.heading2, { marginTop: 40 }]}>
         Start an activity
