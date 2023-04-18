@@ -151,6 +151,9 @@ export default function RepetitionExercise({ route, navigation }) {
       <View>
         <TouchableOpacity
           onPress={() => {
+            if (totalRep + rep == 0) {
+              navigation.navigate("Home");
+            }
             setRunning(false);
             setPopupProps(popupMessages.back);
             setShowConfirmation(true);

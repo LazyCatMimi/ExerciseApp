@@ -150,6 +150,9 @@ export default function DurationExercise({ route, navigation }) {
       <View>
         <TouchableOpacity
           onPress={() => {
+            if (totalTime + time == 0) {
+              navigation.navigate("Home");
+            }
             setRunning(false);
             setPopupProps(popupMessages.back);
             setShowConfirmation(true);
