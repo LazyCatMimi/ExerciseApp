@@ -145,115 +145,121 @@ export default function DurationExercise({ route, navigation }) {
   };
 
   return (
-    <SafeAreaView style={[styles.container, { paddingHorizontal: 50 }]}>
-      {showConfirmation && <Popup {...popupProps} />}
-      <View>
-        <TouchableOpacity
-          onPress={() => {
-            if (totalTime + time == 0) {
-              navigation.navigate("Home");
-            }
-            setRunning(false);
-            setPopupProps(popupMessages.back);
-            setShowConfirmation(true);
-          }}
-          style={{ zIndex: 3, position: "absolute" }}
-        >
-          <IoIosArrowBack size={40} />
-        </TouchableOpacity>
+    <>
+      <SafeAreaView style={[styles.container, { paddingHorizontal: 50 }]}>
+        {showConfirmation && <Popup {...popupProps} />}
+        <View>
+          <TouchableOpacity
+            onPress={() => {
+              if (totalTime + time == 0) {
+                navigation.navigate("Home");
+              }
+              setRunning(false);
+              setPopupProps(popupMessages.back);
+              setShowConfirmation(true);
+            }}
+            style={{ zIndex: 3, position: "absolute" }}
+          >
+            <IoIosArrowBack size={40} />
+          </TouchableOpacity>
 
-        <View style={{ width: "100%" }}>
-          <Text style={[styles.heading2, { textAlign: "center" }]}>
-            {route.params.name}
-          </Text>
+          <View style={{ width: "100%" }}>
+            <Text style={[styles.heading2, { textAlign: "center" }]}>
+              {route.params.name}
+            </Text>
+          </View>
         </View>
-      </View>
-      <Text style={styles.data}>
-        {min}:{sec}.{mil}
-      </Text>
-      {route.params.weight && (
-        <Text style={{ color: "white", textAlign: "center" }}>
-          Calories Burned: {cal.toFixed(2)}
+        <Text style={styles.data}>
+          {min}:{sec}.{mil}
         </Text>
-      )}
-      <View style={styles.actionButtonContainer}>
-        <Button
-          title="reset"
-          onPress={reset}
-          style={styles.button}
-          buttonStyle={{ backgroundColor: "#33383F" }}
-        />
-        <Button
-          title={running ? "stop" : "start"}
-          onPress={stopStart}
-          style={styles.button}
-          buttonStyle={{ backgroundColor: running ? "#AA1010" : "#5EB450" }}
-        />
-      </View>
-      <CheckBox
-        title="set goal"
-        center
-        checked={checked}
-        onPress={() => {
-          setChecked(!checked);
-          setGoal(initGoal);
-          setGoalErr(initGoal);
-          setCachedGoal(initGoal);
-          setIcon(false);
-        }}
-        containerStyle={{ margin: 0, backgroundColor: "none", border: "none" }}
-        textStyle={{ color: "white" }}
-      />
-      {checked && (
-        <>
-          <Input
-            placeholder="min"
-            label="Set a goal for the amount of time you want to achieve in this session."
-            value={goal.min}
-            errorMessage={goalErr.min}
-            onChangeText={(value) => {
-              setGoal({ ...goal, min: value });
-              checkGoalInput(value, "min");
-            }}
-            style={styles.inputs.basic}
-          />
-          <Input
-            placeholder="sec"
-            value={goal.sec}
-            errorMessage={goalErr.sec}
-            onChangeText={(value) => {
-              setGoal({ ...goal, sec: value });
-              checkGoalInput(value, "sec");
-            }}
-            style={styles.inputs.basic}
+        {route.params.weight.length ? (
+          <Text style={{ color: "white", textAlign: "center" }}>
+            Calories Burned: {cal.toFixed(2)}
+          </Text>
+        ) : undefined}
+        <View style={styles.actionButtonContainer}>
+          <Button
+            title="reset"
+            onPress={reset}
+            style={styles.button}
+            buttonStyle={{ backgroundColor: "#33383F" }}
           />
           <Button
-            title="set"
-            icon={icon && <BsCheck color="green" size={20} />}
-            // disable if theres an error, no input, or input==cached input
-            disabled={
-              goalErr.min.length ||
-              goalErr.sec.length ||
-              (!goal.min && !goal.sec) ||
-              (goal.min === cachedGoal.min && goal.sec === cachedGoal.sec) ||
-              disabled
-            }
-            onPress={() => {
-              let cpy = goal;
-              if (!goal.min) {
-                cpy.min = 0;
-              }
-              if (!goal.sec) {
-                cpy.sec = 0;
-              }
-              setGoal({ ...cpy });
-              setCachedGoal({ ...cpy });
-              setIcon(true);
-              setDisabled(true);
-            }}
+            title={running ? "stop" : "start"}
+            onPress={stopStart}
+            style={styles.button}
+            buttonStyle={{ backgroundColor: running ? "#AA1010" : "#5EB450" }}
           />
-        </>
-      )}
-    </SafeAreaView>
+        </View>
+        <CheckBox
+          title="set goal"
+          center
+          checked={checked}
+          onPress={() => {
+            setChecked(!checked);
+            setGoal(initGoal);
+            setGoalErr(initGoal);
+            setCachedGoal(initGoal);
+            setIcon(false);
+          }}
+          containerStyle={{
+            margin: 0,
+            backgroundColor: "none",
+            border: "none",
+          }}
+          textStyle={{ color: "white" }}
+        />
+        {checked && (
+          <>
+            <Input
+              placeholder="min"
+              label="Set a goal for the amount of time you want to achieve in this session."
+              value={goal.min}
+              errorMessage={goalErr.min}
+              onChangeText={(value) => {
+                setGoal({ ...goal, min: value });
+                checkGoalInput(value, "min");
+              }}
+              style={styles.inputs.basic}
+            />
+            <Input
+              placeholder="sec"
+              value={goal.sec}
+              errorMessage={goalErr.sec}
+              onChangeText={(value) => {
+                setGoal({ ...goal, sec: value });
+                checkGoalInput(value, "sec");
+              }}
+              style={styles.inputs.basic}
+            />
+            <Button
+              title="set"
+              icon={icon && <BsCheck color="green" size={20} />}
+              // disable if theres an error, no input, or input==cached input
+              disabled={
+                goalErr.min.length ||
+                goalErr.sec.length ||
+                (!goal.min && !goal.sec) ||
+                (goal.min === cachedGoal.min && goal.sec === cachedGoal.sec) ||
+                disabled
+              }
+              onPress={() => {
+                let cpy = goal;
+                if (!goal.min) {
+                  cpy.min = 0;
+                }
+                if (!goal.sec) {
+                  cpy.sec = 0;
+                }
+                setGoal({ ...cpy });
+                setCachedGoal({ ...cpy });
+                setIcon(true);
+                setDisabled(true);
+              }}
+            />
+          </>
+        )}
+      </SafeAreaView>
+    </>
   );
 }

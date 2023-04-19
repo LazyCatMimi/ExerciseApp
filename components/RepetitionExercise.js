@@ -170,11 +170,11 @@ export default function RepetitionExercise({ route, navigation }) {
         </View>
       </View>
       <Text style={styles.data}>{rep}</Text>
-      {route.params.weight && (
+      {route.params.weight.length ? (
         <Text style={{ color: "white", textAlign: "center" }}>
           Calories Burned: {cal.toFixed(2)}
         </Text>
-      )}
+      ) : undefined}
       <View style={styles.actionButtonContainer}>
         <Button
           title="reset"
