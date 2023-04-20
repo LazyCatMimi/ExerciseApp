@@ -60,11 +60,11 @@ export default function Home({ navigation }) {
     if (userInfo.timeGoal && history.length) {
       const sum = history.reduce((accumulator, currentValue) => {
         if (dateToString(currentValue.date) == today) {
-          return accumulator + ((currentValue.timeElapsed / 100) % 60);
+          return accumulator + ((currentValue.timeElapsed / 100));
         }
         return accumulator;
       }, 0);
-      setTimeProgress(Math.round(sum / 60));
+      setTimeProgress(Math.round(sum/60));
     }
   }, [userInfo]);
   const renderItem = ({ item }) => {
@@ -102,7 +102,7 @@ export default function Home({ navigation }) {
             <View style={styles.row}>
               <ProgressBar
                 progress={calProgress / userInfo.calorieGoal}
-                color={"#090924"}
+                color={"#5957ff"}
                 visible={userInfo.calorieGoal}
                 style={{ width: 200, height: 10, borderRadius: 10 }}
               />
@@ -114,7 +114,7 @@ export default function Home({ navigation }) {
             <View style={styles.row}>
               <ProgressBar
                 progress={timeProgress / userInfo.timeGoal}
-                color={"#090924"}
+                color={"#5957ff"}
                 visible={userInfo.timeGoal}
                 style={{ width: 200, height: 10, borderRadius: 10 }}
               />
