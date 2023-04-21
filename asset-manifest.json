@@ -1,0 +1,42 @@
+{
+  "files": {
+    "main.js": "/ExerciseApp/static/js/main.44811c7c.js",
+    "static/js/152.197584dc.js": "/ExerciseApp/static/js/152.197584dc.js",
+    "static/media/MaterialCommunityIcons.ttf": "/ExerciseApp/static/media/MaterialCommunityIcons.5d42b4e60858731e7b65.ttf",
+    "static/media/Fontisto.ttf": "/ExerciseApp/static/media/Fontisto.c0edd68811e0237502fe.ttf",
+    "static/media/Ionicons.ttf": "/ExerciseApp/static/media/Ionicons.3517aeaa34b2f8cd8eef.ttf",
+    "static/media/MaterialIcons.ttf": "/ExerciseApp/static/media/MaterialIcons.120b4c7bbd155bd0a04d.ttf",
+    "static/media/FontAwesome5_Solid.ttf": "/ExerciseApp/static/media/FontAwesome5_Solid.07c3313b24f7b1ca85ee.ttf",
+    "static/media/FontAwesome.ttf": "/ExerciseApp/static/media/FontAwesome.1e59d2330b4c6deb84b3.ttf",
+    "static/media/FontAwesome5_Brands.ttf": "/ExerciseApp/static/media/FontAwesome5_Brands.9e138496e8f1719c6ebf.ttf",
+    "static/media/AntDesign.ttf": "/ExerciseApp/static/media/AntDesign.163adab9dbd7cb1ed12a.ttf",
+    "static/media/Entypo.ttf": "/ExerciseApp/static/media/Entypo.fc6169344c041cffcdae.ttf",
+    "static/media/Foundation.ttf": "/ExerciseApp/static/media/Foundation.c0cbb004854f9c746f89.ttf",
+    "static/media/Feather.ttf": "/ExerciseApp/static/media/Feather.0f5d9cede2e831f3fc80.ttf",
+    "static/media/SimpleLineIcons.ttf": "/ExerciseApp/static/media/SimpleLineIcons.3ec13a24af3fdda11107.ttf",
+    "static/media/Octicons.ttf": "/ExerciseApp/static/media/Octicons.6b742a230954dc640ba2.ttf",
+    "static/media/FontAwesome5_Regular.ttf": "/ExerciseApp/static/media/FontAwesome5_Regular.1017bce89c72f95bcf8e.ttf",
+    "static/media/Zocial.ttf": "/ExerciseApp/static/media/Zocial.07fea2ac49bcc67d9a6b.ttf",
+    "static/media/tick.png": "/ExerciseApp/static/media/tick.32cb45231ee117d499e2.png",
+    "static/media/arrow-up.png": "/ExerciseApp/static/media/arrow-up.0b0d1af9a5b464b93fde.png",
+    "static/media/close.png": "/ExerciseApp/static/media/close.b65df71afd6c8e422619.png",
+    "static/media/arrow-down.png": "/ExerciseApp/static/media/arrow-down.772a5382a31866c9198e.png",
+    "favicon.ico": "/ExerciseApp/favicon.ico",
+    "static/media/EvilIcons.ttf": "/ExerciseApp/static/media/EvilIcons.699664b33ac2837d5bee.ttf",
+    "index.html": "/ExerciseApp/index.html",
+    "static/media/rocket.png": "/ExerciseApp/static/media/rocket.d2f3bf41d5e4515c39a9.png",
+    "static/media/bell.png": "/ExerciseApp/static/media/bell.cf04af27d6a651c4b904.png",
+    "favicon-32.png": "/ExerciseApp/favicon-32.png",
+    "static/media/star.png": "/ExerciseApp/static/media/star.69c7138684828d68fe5a.png",
+    "static/media/heart.png": "/ExerciseApp/static/media/heart.23b5c2c0eb77d50ff1b4.png",
+    "favicon-16.png": "/ExerciseApp/favicon-16.png",
+    "manifest.json": "/ExerciseApp/manifest.json",
+    "serve.json": "/ExerciseApp/serve.json",
+    "main.44811c7c.js.map": "/ExerciseApp/static/js/main.44811c7c.js.map",
+    "152.197584dc.js.map": "/ExerciseApp/static/js/152.197584dc.js.map"
+  },
+  "entrypoints": [
+    "static/js/152.197584dc.js",
+    "static/js/main.44811c7c.js"
+  ]
+}
