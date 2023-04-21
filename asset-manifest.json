@@ -1,6 +1,6 @@
 {
   "files": {
-    "main.js": "/ExerciseApp/static/js/main.44811c7c.js",
+    "main.js": "/ExerciseApp/static/js/main.eb02334d.js",
     "static/js/152.197584dc.js": "/ExerciseApp/static/js/152.197584dc.js",
     "static/media/MaterialCommunityIcons.ttf": "/ExerciseApp/static/media/MaterialCommunityIcons.5d42b4e60858731e7b65.ttf",
     "static/media/Fontisto.ttf": "/ExerciseApp/static/media/Fontisto.c0edd68811e0237502fe.ttf",
@@ -32,11 +32,11 @@
     "favicon-16.png": "/ExerciseApp/favicon-16.png",
     "manifest.json": "/ExerciseApp/manifest.json",
     "serve.json": "/ExerciseApp/serve.json",
-    "main.44811c7c.js.map": "/ExerciseApp/static/js/main.44811c7c.js.map",
+    "main.eb02334d.js.map": "/ExerciseApp/static/js/main.eb02334d.js.map",
     "152.197584dc.js.map": "/ExerciseApp/static/js/152.197584dc.js.map"
   },
   "entrypoints": [
     "static/js/152.197584dc.js",
-    "static/js/main.44811c7c.js"
+    "static/js/main.eb02334d.js"
   ]
 }
