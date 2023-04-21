@@ -1,6 +1,8 @@
 # Exercise App
 
 See on GitHub pages
+https://lazycatmimi.github.io/ExerciseApp/
+
 An exercise app using **React Native**. This is a mobile application that helps users to manage their fitness routines and track their progress such as time spent and calories burned. User's exercise history can be saved in local storage.
 
 ## Features
