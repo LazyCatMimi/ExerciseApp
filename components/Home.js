@@ -60,11 +60,11 @@ export default function Home({ navigation }) {
     if (userInfo.timeGoal && history.length) {
       const sum = history.reduce((accumulator, currentValue) => {
         if (dateToString(currentValue.date) == today) {
-          return accumulator + ((currentValue.timeElapsed / 100));
+          return accumulator + currentValue.timeElapsed / 100;
         }
         return accumulator;
       }, 0);
-      setTimeProgress(Math.round(sum/60));
+      setTimeProgress(Math.round(sum / 60));
     }
   }, [userInfo]);
   const renderItem = ({ item }) => {
@@ -76,7 +76,7 @@ export default function Home({ navigation }) {
           onPress={() =>
             navigation.navigate(item.type, {
               ...item,
-              weight: userInfo.weight,
+              weight: userInfo.weight ? userInfo.weight : 0,
               history,
             })
           }
